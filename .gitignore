@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+*.log
+
+# Local portfolio persistence file (see src/persistence)
+data/
+portfolio.json

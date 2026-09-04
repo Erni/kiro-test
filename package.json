@@ -1,0 +1,31 @@
+{
+  "name": "kiro-test",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Crypto portfolio management reference application for Kiro best practices",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "start": "node dist/index.js",
+    "test": "jest --ci --passWithNoTests"
+  },
+  "dependencies": {
+    "decimal.js": "10.6.0",
+    "express": "5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.6",
+    "@types/jest": "30.0.0",
+    "@types/node": "24.13.3",
+    "@types/supertest": "7.2.1",
+    "fast-check": "4.9.0",
+    "jest": "30.5.1",
+    "supertest": "7.2.2",
+    "ts-jest": "29.4.12",
+    "typescript": "5.9.3"
+  }
+}

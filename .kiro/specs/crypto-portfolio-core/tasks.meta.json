@@ -1,0 +1,215 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Initialize the Node.js/TypeScript project": [
+      {
+        "executionId": "0545260c-92be-421d-ac21-82862f7a6761",
+        "chatSessionId": "sess_f96978a3-d086-4ff0-a57f-79cfb3baae35",
+        "timestamp": 1788514836122
+      },
+      {
+        "executionId": "0545260c-92be-421d-ac21-82862f7a6761",
+        "chatSessionId": "sess_f96978a3-d086-4ff0-a57f-79cfb3baae35",
+        "timestamp": 1788515829860
+      }
+    ],
+    "1.2 Define core domain types, `Result`, and error types": [
+      {
+        "executionId": "3fb0f68d-3d8d-48d1-b0dd-96a637296b5e",
+        "chatSessionId": "sess_04acde02-7694-4a0e-abd5-2da6bc8a324b",
+        "timestamp": 1788516064873
+      },
+      {
+        "executionId": "3fb0f68d-3d8d-48d1-b0dd-96a637296b5e",
+        "chatSessionId": "sess_04acde02-7694-4a0e-abd5-2da6bc8a324b",
+        "timestamp": 1788516390204
+      }
+    ],
+    "1. Set up project structure and core domain types": [
+      {
+        "executionId": "3fb0f68d-3d8d-48d1-b0dd-96a637296b5e",
+        "chatSessionId": "sess_04acde02-7694-4a0e-abd5-2da6bc8a324b",
+        "timestamp": 1788516390273
+      }
+    ],
+    "2.1 Implement all input validators in `src/domain/validation.ts`": [
+      {
+        "executionId": "0ca11ae9-8d65-4639-8546-de36ce8ea5d4",
+        "chatSessionId": "sess_b9272f8a-97bb-4f4a-9e09-987373e18130",
+        "timestamp": 1788516682829
+      },
+      {
+        "executionId": "0ca11ae9-8d65-4639-8546-de36ce8ea5d4",
+        "chatSessionId": "sess_b9272f8a-97bb-4f4a-9e09-987373e18130",
+        "timestamp": 1788517820310
+      }
+    ],
+    "2. Implement domain input validation": [
+      {
+        "executionId": "0ca11ae9-8d65-4639-8546-de36ce8ea5d4",
+        "chatSessionId": "sess_b9272f8a-97bb-4f4a-9e09-987373e18130",
+        "timestamp": 1788517820413
+      }
+    ],
+    "8.1 Define the repository interface and (de)serialization helpers": [
+      {
+        "executionId": "aab6c3e7-53d6-4c51-b58c-434e0efcfa80",
+        "chatSessionId": "sess_b593a654-0325-4147-afd5-4a82b86bd685",
+        "timestamp": 1788518069052
+      },
+      {
+        "executionId": "aab6c3e7-53d6-4c51-b58c-434e0efcfa80",
+        "chatSessionId": "sess_b593a654-0325-4147-afd5-4a82b86bd685",
+        "timestamp": 1788518186982
+      }
+    ],
+    "3.1 Implement holding transitions and listing in `src/domain/holdings.ts`": [
+      {
+        "executionId": "250805d5-d3bb-41ca-819f-b9f71cb84aa7",
+        "chatSessionId": "sess_1e5217a5-b604-47ec-b501-d054c5d19392",
+        "timestamp": 1788518313194
+      },
+      {
+        "executionId": "250805d5-d3bb-41ca-819f-b9f71cb84aa7",
+        "chatSessionId": "sess_1e5217a5-b604-47ec-b501-d054c5d19392",
+        "timestamp": 1788518394646
+      }
+    ],
+    "3. Implement holding state transitions": [
+      {
+        "executionId": "250805d5-d3bb-41ca-819f-b9f71cb84aa7",
+        "chatSessionId": "sess_1e5217a5-b604-47ec-b501-d054c5d19392",
+        "timestamp": 1788518394733
+      }
+    ],
+    "5.1 Implement `applyTransaction` and `transactionHistory` in `src/domain/transactions.ts`": [
+      {
+        "executionId": "a3266f67-0152-47c4-8e10-d43fc0570498",
+        "chatSessionId": "sess_0eb53670-81bf-490b-a75f-85c0749b7ac3",
+        "timestamp": 1788518475551
+      },
+      {
+        "executionId": "a3266f67-0152-47c4-8e10-d43fc0570498",
+        "chatSessionId": "sess_0eb53670-81bf-490b-a75f-85c0749b7ac3",
+        "timestamp": 1788518586819
+      }
+    ],
+    "5. Implement transaction recording and history": [
+      {
+        "executionId": "a3266f67-0152-47c4-8e10-d43fc0570498",
+        "chatSessionId": "sess_0eb53670-81bf-490b-a75f-85c0749b7ac3",
+        "timestamp": 1788518586897
+      }
+    ],
+    "6.1 Implement `updatePrice` in `src/domain/pricing.ts`": [
+      {
+        "executionId": "d33ddb99-7bca-4f05-98d1-a7b056f290fb",
+        "chatSessionId": "sess_616ff3ad-fa52-4df4-8588-a340099506dc",
+        "timestamp": 1788518668477
+      },
+      {
+        "executionId": "d33ddb99-7bca-4f05-98d1-a7b056f290fb",
+        "chatSessionId": "sess_616ff3ad-fa52-4df4-8588-a340099506dc",
+        "timestamp": 1788518741294
+      }
+    ],
+    "6.2 Implement `holdingValue` and `portfolioOverview` in `src/domain/valuation.ts`": [
+      {
+        "executionId": "9cbce3a5-f72b-400a-87bc-c2ab2487b368",
+        "chatSessionId": "sess_7a189437-da0f-437e-ab9b-0b230cfeba12",
+        "timestamp": 1788519073247
+      },
+      {
+        "executionId": "9cbce3a5-f72b-400a-87bc-c2ab2487b368",
+        "chatSessionId": "sess_7a189437-da0f-437e-ab9b-0b230cfeba12",
+        "timestamp": 1788519155982
+      }
+    ],
+    "6. Implement price updates and valuation": [
+      {
+        "executionId": "9cbce3a5-f72b-400a-87bc-c2ab2487b368",
+        "chatSessionId": "sess_7a189437-da0f-437e-ab9b-0b230cfeba12",
+        "timestamp": 1788519156049
+      }
+    ],
+    "8.2 Implement `JsonFilePortfolioRepository` in `src/persistence/jsonFilePortfolioRepository.ts`": [
+      {
+        "executionId": "9c38cdea-7376-400d-bf42-24caeaa9b132",
+        "chatSessionId": "sess_39cbfa54-69cc-490a-be3b-6b7d6aa2cd24",
+        "timestamp": 1788519980263
+      },
+      {
+        "executionId": "9c38cdea-7376-400d-bf42-24caeaa9b132",
+        "chatSessionId": "sess_39cbfa54-69cc-490a-be3b-6b7d6aa2cd24",
+        "timestamp": 1788520105358
+      }
+    ],
+    "8. Implement persistence layer": [
+      {
+        "executionId": "9c38cdea-7376-400d-bf42-24caeaa9b132",
+        "chatSessionId": "sess_39cbfa54-69cc-490a-be3b-6b7d6aa2cd24",
+        "timestamp": 1788520105433
+      }
+    ],
+    "8.3 Write unit test for empty-portfolio startup": [
+      {
+        "executionId": "5483f3dc-bc9c-4f10-98f8-27080d312dc4",
+        "chatSessionId": "sess_7e1de930-3732-4505-b401-17d15992bb87",
+        "timestamp": 1788520282757
+      },
+      {
+        "executionId": "5483f3dc-bc9c-4f10-98f8-27080d312dc4",
+        "chatSessionId": "sess_7e1de930-3732-4505-b401-17d15992bb87",
+        "timestamp": 1788520347722
+      }
+    ],
+    "8.4 Write unit test for corrupted-file startup": [
+      {
+        "executionId": "8f72ae52-d2cb-4c60-a9ee-74e1e59194ad",
+        "chatSessionId": "sess_64b7add8-5092-448e-8aa2-a53539b6b6f3",
+        "timestamp": 1788520565827
+      },
+      {
+        "executionId": "8f72ae52-d2cb-4c60-a9ee-74e1e59194ad",
+        "chatSessionId": "sess_64b7add8-5092-448e-8aa2-a53539b6b6f3",
+        "timestamp": 1788520654788
+      }
+    ],
+    "8.5 Write unit test for atomic write behavior": [
+      {
+        "executionId": "1fdff474-2ffb-4b66-a85b-b56519a6ecd0",
+        "chatSessionId": "sess_c49bcf08-a96a-4b83-9b5c-df463948478f",
+        "timestamp": 1788520675802
+      },
+      {
+        "executionId": "1fdff474-2ffb-4b66-a85b-b56519a6ecd0",
+        "chatSessionId": "sess_c49bcf08-a96a-4b83-9b5c-df463948478f",
+        "timestamp": 1788520795550
+      }
+    ],
+    "8.6 Write property test for persistence round-trip": [
+      {
+        "executionId": "0fba2444-3e84-4ce7-a523-a7582c43bd23",
+        "chatSessionId": "sess_03c54373-ab05-44cd-aad0-953ed19fa8ff",
+        "timestamp": 1788520936944
+      },
+      {
+        "executionId": "0fba2444-3e84-4ce7-a523-a7582c43bd23",
+        "chatSessionId": "sess_03c54373-ab05-44cd-aad0-953ed19fa8ff",
+        "timestamp": 1788521167327
+      }
+    ],
+    "2.2 Write unit tests for validation boundary values": [
+      {
+        "executionId": "c70dc8fb-0b56-4ea0-abf1-5abb85b7640e",
+        "chatSessionId": "sess_1635adb6-3b6d-48ac-bf76-3b413fab5010",
+        "timestamp": 1788521537107
+      },
+      {
+        "executionId": "c70dc8fb-0b56-4ea0-abf1-5abb85b7640e",
+        "chatSessionId": "sess_1635adb6-3b6d-48ac-bf76-3b413fab5010",
+        "timestamp": 1788521768711
+      }
+    ]
+  }
+}
