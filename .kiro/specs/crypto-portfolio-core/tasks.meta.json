@@ -1,5 +1,58 @@
 {
-  "pbtResults": {},
+  "pbtResults": {
+    "9.3 Write property test for persistence failure rollback": {
+      "status": "passed",
+      "lastRunTimestamp": 1788530863826
+    },
+    "8.6 Write property test for persistence round-trip": {
+      "status": "passed",
+      "lastRunTimestamp": 1788530863575
+    },
+    "3.5 Write property test for valid holding update": {
+      "status": "passed",
+      "lastRunTimestamp": 1788531881828
+    },
+    "3.7 Write property test for manual holding removal": {
+      "status": "passed",
+      "lastRunTimestamp": 1788531915673
+    },
+    "3.6 Write property test for invalid holding update": {
+      "status": "passed",
+      "lastRunTimestamp": 1788531924394
+    },
+    "3.4 Write property test for invalid holding creation input": {
+      "status": "passed",
+      "lastRunTimestamp": 1788531994111
+    },
+    "3.8 Write property test for holdings listing": {
+      "status": "passed",
+      "lastRunTimestamp": 1788532118300
+    },
+    "5.2 Write property test for Buy transactions": {
+      "status": "passed",
+      "lastRunTimestamp": 1788532157461
+    },
+    "5.5 Write property test for selling to zero quantity": {
+      "status": "passed",
+      "lastRunTimestamp": 1788532161483
+    },
+    "5.3 Write property test for Sell transactions": {
+      "status": "passed",
+      "lastRunTimestamp": 1788532188028
+    },
+    "6.5 Write property test for portfolio overview valuation": {
+      "status": "passed",
+      "lastRunTimestamp": 1788532372991
+    },
+    "6.4 Write property test for operations on nonexistent holdings": {
+      "status": "passed",
+      "lastRunTimestamp": 1788532389616
+    },
+    "5.6 Write property test for transaction history ordering and completeness": {
+      "status": "passed",
+      "lastRunTimestamp": 1788532397766
+    }
+  },
   "executionHistory": {
     "1.1 Initialize the Node.js/TypeScript project": [
       {
@@ -209,6 +262,171 @@
         "executionId": "c70dc8fb-0b56-4ea0-abf1-5abb85b7640e",
         "chatSessionId": "sess_1635adb6-3b6d-48ac-bf76-3b413fab5010",
         "timestamp": 1788521768711
+      }
+    ],
+    "9.1 Implement `PortfolioService` mutating operations in `src/service/portfolioService.ts`": [
+      {
+        "executionId": "bdb541bc-deee-4281-960d-932e412ba985",
+        "chatSessionId": "sess_5deb1ebe-c9f9-43d8-9fce-08ea7daadaa2",
+        "timestamp": 1788528912898
+      },
+      {
+        "executionId": "bdb541bc-deee-4281-960d-932e412ba985",
+        "chatSessionId": "sess_5deb1ebe-c9f9-43d8-9fce-08ea7daadaa2",
+        "timestamp": 1788529221716
+      }
+    ],
+    "9.2 Implement `PortfolioService` read-only operations": [
+      {
+        "executionId": "42283296-344d-4af7-9e19-8891787b46a5",
+        "chatSessionId": "sess_dbb35589-bc12-4377-bb36-e56bc235330a",
+        "timestamp": 1788529654523
+      },
+      {
+        "executionId": "42283296-344d-4af7-9e19-8891787b46a5",
+        "chatSessionId": "sess_dbb35589-bc12-4377-bb36-e56bc235330a",
+        "timestamp": 1788529787624
+      }
+    ],
+    "9. Implement application service layer": [
+      {
+        "executionId": "42283296-344d-4af7-9e19-8891787b46a5",
+        "chatSessionId": "sess_dbb35589-bc12-4377-bb36-e56bc235330a",
+        "timestamp": 1788529787712
+      }
+    ],
+    "9.3 Write property test for persistence failure rollback": [
+      {
+        "executionId": "ac8bef38-4430-4396-82c7-6c987bcfeff6",
+        "chatSessionId": "sess_ee9ccec7-fce0-4cbe-85ef-beefe6525f10",
+        "timestamp": 1788529828004
+      },
+      {
+        "executionId": "ac8bef38-4430-4396-82c7-6c987bcfeff6",
+        "chatSessionId": "sess_ee9ccec7-fce0-4cbe-85ef-beefe6525f10",
+        "timestamp": 1788530098850
+      }
+    ],
+    "10. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "aae13450-7436-4168-962b-c87de676ef3c",
+        "chatSessionId": "sess_1da6807f-60ee-4ec3-b341-2106012265d2",
+        "timestamp": 1788530669772
+      },
+      {
+        "executionId": "aae13450-7436-4168-962b-c87de676ef3c",
+        "chatSessionId": "sess_1da6807f-60ee-4ec3-b341-2106012265d2",
+        "timestamp": 1788530883675
+      }
+    ],
+    "11.1 Set up the Express app and error-to-status-code mapping": [
+      {
+        "executionId": "2a7ad0c5-61c0-4b41-b9e1-f3b1899ab65b",
+        "chatSessionId": "sess_3444581f-d914-41a2-a9db-b8e46ab28ec7",
+        "timestamp": 1788532815528
+      },
+      {
+        "executionId": "2a7ad0c5-61c0-4b41-b9e1-f3b1899ab65b",
+        "chatSessionId": "sess_3444581f-d914-41a2-a9db-b8e46ab28ec7",
+        "timestamp": 1788533093868
+      }
+    ],
+    "11.2 Implement holdings routes in `src/http/routes/holdings.ts`": [
+      {
+        "executionId": "a55c0ec6-65aa-461e-8762-5d7c1b48dfe3",
+        "chatSessionId": "sess_3b2d173e-02a7-4db7-94dc-e5a55ab631cf",
+        "timestamp": 1788533324429
+      },
+      {
+        "executionId": "a55c0ec6-65aa-461e-8762-5d7c1b48dfe3",
+        "chatSessionId": "sess_3b2d173e-02a7-4db7-94dc-e5a55ab631cf",
+        "timestamp": 1788533503138
+      }
+    ],
+    "11.3 Implement transactions routes in `src/http/routes/transactions.ts`": [
+      {
+        "executionId": "32b16986-95e2-4d81-8df7-337eb800e750",
+        "chatSessionId": "sess_0c8c4949-627f-4a2b-b049-fbf92259857b",
+        "timestamp": 1788533529004
+      },
+      {
+        "executionId": "32b16986-95e2-4d81-8df7-337eb800e750",
+        "chatSessionId": "sess_0c8c4949-627f-4a2b-b049-fbf92259857b",
+        "timestamp": 1788533638156
+      }
+    ],
+    "11.4 Implement overview and price-update routes in `src/http/routes/portfolio.ts`": [
+      {
+        "executionId": "ef267125-e2ab-4f5f-8d89-f892a1c48dc0",
+        "chatSessionId": "sess_f22e6521-720f-46a5-9159-5da7a8874f06",
+        "timestamp": 1788533662693
+      },
+      {
+        "executionId": "ef267125-e2ab-4f5f-8d89-f892a1c48dc0",
+        "chatSessionId": "sess_f22e6521-720f-46a5-9159-5da7a8874f06",
+        "timestamp": 1788533788177
+      }
+    ],
+    "11. Implement HTTP layer": [
+      {
+        "executionId": "ef267125-e2ab-4f5f-8d89-f892a1c48dc0",
+        "chatSessionId": "sess_f22e6521-720f-46a5-9159-5da7a8874f06",
+        "timestamp": 1788533788242
+      }
+    ],
+    "11.5 Write unit tests for HTTP route status-code mapping": [
+      {
+        "executionId": "31993c24-0215-4cf3-bd8d-b9a7fd51e708",
+        "chatSessionId": "sess_5b0516a0-b403-4e9d-ab11-a4e5e3d0417a",
+        "timestamp": 1788533827039
+      },
+      {
+        "executionId": "31993c24-0215-4cf3-bd8d-b9a7fd51e708",
+        "chatSessionId": "sess_5b0516a0-b403-4e9d-ab11-a4e5e3d0417a",
+        "timestamp": 1788534004435
+      }
+    ],
+    "12.1 Implement the server entrypoint in `src/index.ts`": [
+      {
+        "executionId": "df291dbe-b015-427e-8835-72a753db44fa",
+        "chatSessionId": "sess_d32e72b4-ec48-447f-a503-26a54ee991be",
+        "timestamp": 1788534140049
+      },
+      {
+        "executionId": "df291dbe-b015-427e-8835-72a753db44fa",
+        "chatSessionId": "sess_d32e72b4-ec48-447f-a503-26a54ee991be",
+        "timestamp": 1788534669074
+      }
+    ],
+    "12. Wire application startup": [
+      {
+        "executionId": "df291dbe-b015-427e-8835-72a753db44fa",
+        "chatSessionId": "sess_d32e72b4-ec48-447f-a503-26a54ee991be",
+        "timestamp": 1788534669143
+      }
+    ],
+    "12.2 Write unit test for startup failure on corrupted data": [
+      {
+        "executionId": "11576f30-7a9e-41ce-833b-10fafbc7183f",
+        "chatSessionId": "sess_44488f92-3241-47ab-ba2d-13966025f956",
+        "timestamp": 1788534907790
+      },
+      {
+        "executionId": "11576f30-7a9e-41ce-833b-10fafbc7183f",
+        "chatSessionId": "sess_44488f92-3241-47ab-ba2d-13966025f956",
+        "timestamp": 1788535061009
+      }
+    ],
+    "13. Final checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "2219cecf-a5d6-4856-8249-010b502776b6",
+        "chatSessionId": "sess_8f2557f0-4cb0-4866-987b-b320dc3888e3",
+        "timestamp": 1788535597200
+      },
+      {
+        "executionId": "2219cecf-a5d6-4856-8249-010b502776b6",
+        "chatSessionId": "sess_8f2557f0-4cb0-4866-987b-b320dc3888e3",
+        "timestamp": 1788536034644
       }
     ]
   }

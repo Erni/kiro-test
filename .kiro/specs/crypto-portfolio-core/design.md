@@ -9,7 +9,7 @@ The design favors a small, strictly-layered architecture with a pure, framework-
 Key technical decisions:
 
 - **Language/runtime**: TypeScript on Node.js. TypeScript's structural typing and discriminated unions map cleanly onto the domain's validation and error states, and it is a natural fit for a web application reference project.
-- **Arbitrary-precision arithmetic**: quantities and prices are stored and computed using a decimal library (`decimal.js`) rather than native `number`, because the requirements demand exact handling of values up to 1,000,000,000,000 with up to 8 decimal places — a range/precision combination that loses accuracy under IEEE-754 floats.
+- **Arbitrary-precision arithmetic**: quantities and prices are stored and computed using a decimal library (`decimal.js`) rather than native `number`, because the requirements demand exact handling of values up to 1,000,000,000,000 with up to 8 decimal places — a range/precision combination that loses accuracy under IEEE-754 floats. Choosing `decimal.js` is not sufficient on its own: it rounds the result of every arithmetic operation to a configured number of significant digits, so the exactness Req 3.1 and 3.2 depend on requires that limit to be raised above what this domain can produce. See [Decimal precision](#decimal-precision).
 - **Persistence**: a JSON-file-backed repository behind a small `PortfolioRepository` interface. This is enough to satisfy the persistence requirements (survive restarts, atomic all-or-nothing writes) while staying simple and dependency-free; a database-backed implementation could later satisfy the same interface.
 - **API surface**: a thin HTTP layer (Express) that translates requests into calls on a single `PortfolioService`, and translates domain results/errors back into HTTP responses. All the interesting logic is in `PortfolioService` and the domain model, not in route handlers.
 
@@ -122,6 +122,21 @@ function transactionHistory(state: PortfolioState, symbol: Symbol): Transaction[
 ```
 
 `Result<T, E>` is a discriminated union (`{ ok: true; value: T } | { ok: false; error: E }`), used instead of exceptions for all *expected* domain outcomes (validation failures, not-found, duplicate, insufficient quantity) so that error handling is explicit and total at every call site.
+
+#### Decimal precision
+
+`decimal.js` rounds the *result* of every arithmetic operation (`times`, `plus`, `minus`, `div`) to `Decimal.precision` significant digits; the library default is 20. The `Decimal` constructor never rounds, so parsing input is exact regardless — only computed values are affected. `src/domain/decimalConfig.ts` is the single owner of that global configuration and sets the precision to **80 significant digits**.
+
+The figure is derived from the domain's own bounds. A quantity or Current_Price has at most 13 integer digits and at most 8 decimal places, so at most 20 significant digits (`999999999999.99999999` is the largest valid value using every decimal place, at 20 digits; `1000000000000` itself is 13). Holding_Value is `quantity * currentPrice`, giving at most 25 integer digits and exactly 16 decimal places — up to 40 significant digits for an exact product. Portfolio_Value sums those products, which never adds decimal places but grows the integer part by `log10(holdingCount)`. 80 leaves ample headroom above 40.
+
+This is a correctness concern on the write path as well as in derived views: `applyTransaction`'s Buy branch accumulates `existing.quantity.plus(input.quantity)`, and Transaction quantities are deliberately unbounded (Req 2.6 constrains only `> 0`), so a rounded sum would be persisted, not merely displayed.
+
+`toExpNeg` and `toExpPos` are widened to match, because `toString()` switches to exponential notation outside its default -7…21 window and ordinary domain values cross it (e.g. `0.00000001` rendering as `"1e-8"` inside a validation message). That is a rendering concern only; persistence uses `toFixed()`, which always emits plain notation.
+
+Two consequences for anyone extending the domain:
+
+- Import `Decimal` from `src/domain/decimalConfig.ts`, never from `decimal.js` directly, so the configuration is always in effect before any arithmetic runs. Type-only imports (`import type`) are exempt, since they are erased at compile time.
+- The precision is coupled to `MAX_VALUE` and `MAX_DECIMAL_PLACES`. Widening either bound requires revisiting it.
 
 ### Application layer
 

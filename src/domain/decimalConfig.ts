@@ -13,15 +13,17 @@ import { Decimal } from 'decimal.js';
  * ## Why 80 significant digits
  *
  * - A quantity or Current_Price is at most 1,000,000,000,000 with at most 8
- *   decimal places, so at most 13 integer digits and 8 decimal places.
+ *   decimal places, so at most 13 integer digits and 8 decimal places, i.e. at
+ *   most **20 significant digits** (the largest value using every decimal place
+ *   is `999999999999.99999999`, at 20 digits; `1000000000000` itself is 13).
  * - Holding_Value is `quantity * currentPrice`: at most 25 integer digits and
- *   exactly 16 decimal places, i.e. up to **41 significant digits** for an exact
+ *   exactly 16 decimal places, i.e. up to **40 significant digits** for an exact
  *   product. (The realistic case `12345.12345678 * 54321.87654321` already needs
  *   25, so this is not only an extreme-value concern.)
  * - Portfolio_Value sums those products across Holdings. Summing never adds
  *   decimal places — the result keeps the same 16 — but it grows the integer
  *   part by `log10(holdingCount)`.
- * - 80 leaves 39 digits of headroom above the 41 a single product needs, i.e.
+ * - 80 leaves 40 digits of headroom above the 40 a single product needs, i.e.
  *   room for the integer part to grow to 64 digits. Even an absurd portfolio of
  *   10^39 maximum-value Holdings would still sum exactly.
  *
