@@ -3,43 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Crypto Portfolio</title>
+  <title>Vela Portfolio</title>
+  <link rel="stylesheet" href="/vendor/vela/tokens/colors.css" />
+  <link rel="stylesheet" href="/vendor/vela/tokens/typography.css" />
+  <link rel="stylesheet" href="/vendor/vela/tokens/spacing.css" />
+  <link rel="stylesheet" href="/vendor/vela/tokens/effects.css" />
+  <link rel="stylesheet" href="/vendor/vela/tokens/base.css" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Crypto Portfolio</h1>
-  </header>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-brand">
+        <span class="app-brand-dot" aria-hidden="true"></span>
+        <span class="app-brand-name">Vela</span>
+        <span class="app-brand-suffix">Portfolio</span>
+      </div>
 
-  <div id="connectivity-error-banner" class="connectivity-error-banner" hidden role="alert">
-    The server could not be reached. Please check your connection.
+      <div class="app-header-status">
+        <span id="loading-indicator" class="spinner" hidden aria-live="polite">
+          <span class="spinner-ring" aria-hidden="true"></span>
+          <span class="spinner-label">Syncing&hellip;</span>
+        </span>
+
+        <div class="app-header-value">
+          <div class="app-header-value-label">Portfolio value</div>
+          <div class="app-header-value-amount">
+            <span aria-hidden="true">$</span><span id="header-portfolio-value">&mdash;</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <section class="card" aria-labelledby="holdings-heading">
+        <div class="card-head">
+          <h3 class="card-title" id="holdings-heading">Holdings</h3>
+          <button type="button" id="add-holding-toggle" class="btn btn-primary btn-sm">
+            <svg class="icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+            Add holding
+          </button>
+        </div>
+
+        <div id="add-holding-container" class="add-holding-panel" hidden></div>
+        <div id="overview-container"></div>
+      </section>
+
+      <section class="card" aria-label="Transactions">
+        <div class="tabs" role="tablist" aria-label="Transaction views">
+          <button type="button" id="tab-transaction" class="tab is-selected" role="tab"
+                  aria-selected="true" aria-controls="panel-transaction">Record transaction</button>
+          <button type="button" id="tab-history" class="tab" role="tab"
+                  aria-selected="false" aria-controls="panel-history">Transaction history</button>
+        </div>
+
+        <div id="panel-transaction" role="tabpanel" aria-labelledby="tab-transaction">
+          <div id="transaction-container"></div>
+        </div>
+
+        <div id="panel-history" role="tabpanel" aria-labelledby="tab-history" hidden>
+          <div id="transaction-history-container"></div>
+        </div>
+      </section>
+    </main>
   </div>
-
-  <div id="loading-indicator" class="loading-indicator" hidden aria-live="polite">
-    Loading&hellip;
-  </div>
-
-  <main>
-    <section id="overview-section" aria-labelledby="overview-heading">
-      <h2 id="overview-heading">Portfolio Overview</h2>
-      <div id="overview-container"></div>
-    </section>
-
-    <section id="add-holding-section" aria-labelledby="add-holding-heading">
-      <h2 id="add-holding-heading">Add Holding</h2>
-      <div id="add-holding-container"></div>
-    </section>
-
-    <section id="transaction-section" aria-labelledby="transaction-heading">
-      <h2 id="transaction-heading">Record Transaction</h2>
-      <div id="transaction-container"></div>
-    </section>
-
-    <section id="transaction-history-section" aria-labelledby="transaction-history-heading">
-      <h2 id="transaction-history-heading">Transaction History</h2>
-      <div id="transaction-history-container"></div>
-    </section>
-  </main>
 
   <script type="module" src="/app/main.js"></script>
 </body>

@@ -74,12 +74,12 @@ describe('transactionHistoryView', () => {
     const firstRowCells = rows[0]?.querySelectorAll('td') ?? [];
     expect(firstRowCells[0]?.textContent).toBe('Buy');
     expect(firstRowCells[1]?.textContent).toBe('1');
-    expect(firstRowCells[2]?.textContent).toBe('50000');
+    expect(firstRowCells[2]?.textContent).toBe('$50000');
 
     const secondRowCells = rows[1]?.querySelectorAll('td') ?? [];
     expect(secondRowCells[0]?.textContent).toBe('Sell');
     expect(secondRowCells[1]?.textContent).toBe('0.5');
-    expect(secondRowCells[2]?.textContent).toBe('55000');
+    expect(secondRowCells[2]?.textContent).toBe('$55000');
   });
 
   it('renders the empty-state message and no table when no Transactions are returned', async () => {

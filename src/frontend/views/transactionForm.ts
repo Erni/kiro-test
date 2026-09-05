@@ -11,36 +11,43 @@
  * directly). On a rejected submission, displays the returned error message
  * instead of a confirmation.
  *
+ * Per the Vela design this form is the first of the side panel's two tabs;
+ * the tab chrome itself lives in `public/index.html` and is wired by
+ * `sidePanelTabs.ts`, so this view still owns nothing but its own form.
+ * Symbols are upper-cased as they are typed, matching the design and the
+ * Backend_API's uppercase-only symbol format.
+ *
  * **Validates: Requirements 5.1, 5.2, 5.3, 5.4, 5.5, 5.6**
  */
 
 import * as apiClient from '../apiClient.js';
+import { createIcon } from '../icons.js';
 import { messageForApiError, messageForNetworkFailure } from '../errorPresentation.js';
 import * as portfolioEvents from '../portfolioEvents.js';
 import type { TransactionRequest, TransactionResponse } from '../types.js';
 
 const FORM_HTML = `
-  <form id="transaction-form">
-    <label for="transaction-symbol">
-      Symbol
-      <input id="transaction-symbol" name="symbol" type="text" required />
+  <form id="transaction-form" class="form-stack">
+    <label class="field field-required" for="transaction-symbol">
+      <span class="field-label">Symbol</span>
+      <input id="transaction-symbol" name="symbol" type="text" required autocomplete="off" />
     </label>
-    <label for="transaction-type">
-      Type
+    <label class="field" for="transaction-type">
+      <span class="field-label">Type</span>
       <select id="transaction-type" name="type" required>
         <option value="Buy">Buy</option>
         <option value="Sell">Sell</option>
       </select>
     </label>
-    <label for="transaction-quantity">
-      Quantity
-      <input id="transaction-quantity" name="quantity" type="text" required />
+    <label class="field field-mono field-required" for="transaction-quantity">
+      <span class="field-label">Quantity</span>
+      <input id="transaction-quantity" name="quantity" type="text" required autocomplete="off" inputmode="decimal" />
     </label>
-    <label for="transaction-price">
-      Price per unit
-      <input id="transaction-price" name="pricePerUnit" type="text" required />
+    <label class="field field-mono field-required" for="transaction-price">
+      <span class="field-label">Price per unit</span>
+      <input id="transaction-price" name="pricePerUnit" type="text" required autocomplete="off" inputmode="decimal" />
     </label>
-    <button type="submit">Record transaction</button>
+    <button type="submit" class="btn btn-accent" id="transaction-submit">Record transaction</button>
   </form>
   <p id="transaction-confirmation" class="confirmation-message" hidden></p>
   <p id="transaction-error" class="error-message" hidden></p>
@@ -63,7 +70,7 @@ function readInput(form: HTMLFormElement): TransactionRequest {
 
 /** Renders the confirmation for a successfully recorded Transaction (Req 5.3). */
 function showConfirmation(confirmationElement: HTMLElement, transaction: TransactionResponse): void {
-  confirmationElement.textContent = `Recorded ${transaction.type} of ${transaction.quantity} ${transaction.symbol} at ${transaction.pricePerUnit} per unit.`;
+  confirmationElement.textContent = `Recorded ${transaction.type} of ${transaction.quantity} ${transaction.symbol} at $${transaction.pricePerUnit} per unit.`;
   confirmationElement.removeAttribute('hidden');
 }
 
@@ -89,6 +96,16 @@ export function init(container: HTMLElement): void {
   const form = container.querySelector('#transaction-form') as HTMLFormElement;
   const confirmationElement = container.querySelector('#transaction-confirmation') as HTMLElement;
   const errorElement = container.querySelector('#transaction-error') as HTMLElement;
+  const submitButton = container.querySelector('#transaction-submit') as HTMLButtonElement;
+  const symbolInput = container.querySelector('#transaction-symbol') as HTMLInputElement;
+
+  // The design's accent button leads with a swap glyph; it is prepended here
+  // rather than written into FORM_HTML so the icon markup stays in `icons.ts`.
+  submitButton.insertBefore(createIcon('arrow-left-right', 14), submitButton.firstChild);
+
+  symbolInput.addEventListener('input', () => {
+    symbolInput.value = symbolInput.value.toUpperCase();
+  });
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();

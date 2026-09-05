@@ -63,8 +63,28 @@ Frontend (public/app, static)  ->  HTTP (Express routes)  ->  PortfolioService  
 - **`src/frontend`** — a framework-free, no-bundler browser UI compiled by `tsconfig.frontend.json`
   to `public/app/`. `apiClient.ts` is the sole caller of `fetch`; `main.ts` composes four views
   (portfolio overview, add-holding form, transaction form, transaction history) against the
-  containers declared in `public/index.html`. Views communicate through a small `portfolioChanged`
+  containers declared in `public/index.html`, then wires the side panel's tabs
+  (`views/sidePanelTabs.ts`). Views communicate through a small `portfolioChanged`
   event bus (`portfolioEvents.ts`) rather than referencing each other directly.
+
+### Look and feel
+
+The UI implements the **Vela** design (`Crypto Portfolio Manager.dc.html` in the Claude Design
+project it was imported from). Holdings sit in the left card, with add-holding as a disclosure
+panel and per-row inline editing, price updates, and a modal removal confirmation; the transaction
+form and transaction history share the right card behind a two-tab control.
+
+- `public/vendor/vela/tokens/` holds the design system's five token files, **vendored verbatim**.
+  They are the only source of colour, type, spacing, and effect values.
+- `public/styles.css` translates each design-system component (Card, Button, IconButton, Input,
+  Select, Table, Badge, InlineAlert, EmptyState, Dialog, Spinner) from the design's inline React
+  styles into a plain CSS class, referencing only those tokens. Re-vendoring updated tokens
+  restyles the whole app.
+- `src/frontend/icons.ts` inlines the eight Lucide glyphs the design uses as SVG, rather than
+  loading them from a CDN at runtime as the design canvas does, so the app stays self-contained.
+- `tokens/typography.css` keeps the design's Google Fonts `@import` for Plus Jakarta Sans and
+  JetBrains Mono. It is the app's only outbound request; both tokens carry system fallback stacks,
+  so the UI is correct offline. Delete the `@import` line to drop it entirely.
 
 Quantities and prices are handled with `decimal.js`, not native numbers. The domain supports values
 up to 1,000,000,000,000 with 8 decimal places, and a holding value multiplies two of those together
@@ -154,7 +174,9 @@ Two complementary styles on the backend, plus DOM-based unit tests for the front
   assignment, first-run startup with no data file, startup against a corrupted file, atomic write
   behaviour, and HTTP status mapping.
 - **Frontend tests** (`test/frontend/`) use Jest with `jest-environment-jsdom` and
-  `@testing-library/dom` against a mocked `apiClient`. The frontend introduces no business logic of
+  `@testing-library/dom` against a mocked `apiClient`. They assert on structural hooks — field
+  names, ids, and the `holding-*` class names — rather than on presentation, so restyling does not
+  move them. The frontend introduces no business logic of
   its own, so these are example-based only — no property-based tests — covering rendering, form
   validation, and the success/error paths of each view.
 

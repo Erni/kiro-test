@@ -1,0 +1,6 @@
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-bg-page);color:var(--text-primary);font-family:var(--font-sans);font-size:var(--text-base);line-height:var(--leading-normal);-webkit-font-smoothing:antialiased}
+a{color:var(--link);text-decoration:none}
+a:hover{color:var(--link-hover);text-decoration:underline}
+h1,h2,h3,h4{font-family:var(--font-sans);font-weight:var(--weight-extrabold);letter-spacing:-0.01em;margin:0}
+.mono-figures{font-family:var(--font-mono);font-variant-numeric:tabular-nums}

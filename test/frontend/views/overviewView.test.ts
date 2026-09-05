@@ -19,6 +19,11 @@
  * error state) and make no assumption about the contents of the
  * `holding-actions` cell, which later tasks (5.3, 5.5, 5.7) populate.
  *
+ * The Portfolio_Value is asserted on the page header rather than on the
+ * view's container: the Vela design displays it in the application header, so
+ * `overviewView` writes it to `#header-portfolio-value` (and skips it when
+ * that element is absent, as `loadingIndicator` does with its own).
+ *
  * **Validates: Requirements 1.2, 1.3, 1.4, 1.5**
  */
 
@@ -42,6 +47,25 @@ function emptyOverview(): PortfolioOverviewResponse {
   return { holdings: [], portfolioValue: '0' };
 }
 
+/**
+ * Installs the header element the view writes the Portfolio_Value into, which
+ * in the real page lives in `public/index.html` outside the view's container,
+ * and returns it.
+ */
+function installHeaderPortfolioValue(): HTMLElement {
+  document.body.innerHTML = '<span id="header-portfolio-value"></span>';
+  return headerPortfolioValue();
+}
+
+/** The header element the view writes the Portfolio_Value into. */
+function headerPortfolioValue(): HTMLElement {
+  const element = document.getElementById('header-portfolio-value');
+  if (element === null) {
+    throw new Error('the header portfolio-value element is missing');
+  }
+  return element;
+}
+
 /** Flushes the microtask queue so the async fetch-and-render sequence completes. */
 async function flush(): Promise<void> {
   await Promise.resolve();
@@ -52,6 +76,7 @@ describe('overviewView', () => {
   let getOverviewSpy: jest.SpiedFunction<typeof apiClient.getOverview>;
 
   beforeEach(() => {
+    installHeaderPortfolioValue();
     getOverviewSpy = jest.spyOn(apiClient, 'getOverview');
   });
 
@@ -62,7 +87,7 @@ describe('overviewView', () => {
     init(container);
     await flush();
 
-    const rows = container.querySelectorAll('tbody tr');
+    const rows = container.querySelectorAll('tbody tr[data-symbol]');
     expect(rows).toHaveLength(2);
 
     const btcRow = container.querySelector('tr[data-symbol="BTC"]');
@@ -77,7 +102,7 @@ describe('overviewView', () => {
     expect(ethRow?.querySelector('.holding-current-price')?.textContent).toBe('3000');
     expect(ethRow?.querySelector('.holding-value')?.textContent).toBe('30000');
 
-    expect(container.querySelector('.portfolio-value')?.textContent).toBe('Portfolio value: 105000');
+    expect(headerPortfolioValue().textContent).toBe('105000');
   });
 
   it('renders the empty-state message and zero Portfolio_Value for an empty response', async () => {
@@ -88,7 +113,7 @@ describe('overviewView', () => {
     await flush();
 
     expect(container.querySelector('.empty-state')?.textContent).toBe('This portfolio has no holdings yet.');
-    expect(container.querySelector('.portfolio-value')?.textContent).toBe('Portfolio value: 0');
+    expect(headerPortfolioValue().textContent).toBe('0');
     expect(container.querySelector('table')).toBeNull();
   });
 
@@ -122,7 +147,7 @@ describe('overviewView', () => {
     await flush();
 
     expect(container.querySelector('.empty-state')).toBeNull();
-    expect(container.querySelectorAll('tbody tr')).toHaveLength(2);
-    expect(container.querySelector('.portfolio-value')?.textContent).toBe('Portfolio value: 105000');
+    expect(container.querySelectorAll('tbody tr[data-symbol]')).toHaveLength(2);
+    expect(headerPortfolioValue().textContent).toBe('105000');
   });
 });
