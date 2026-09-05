@@ -74,17 +74,20 @@ project it was imported from). Holdings sit in the left card, with add-holding a
 panel and per-row inline editing, price updates, and a modal removal confirmation; the transaction
 form and transaction history share the right card behind a two-tab control.
 
-- `public/vendor/vela/tokens/` holds the design system's five token files, **vendored verbatim**.
-  They are the only source of colour, type, spacing, and effect values.
+- `public/vendor/vela/tokens/` holds the design system's five token files, vendored from the
+  design system. They are the only source of colour, type, spacing, and effect values. The one
+  deviation from the source is in `typography.css` — see below.
 - `public/styles.css` translates each design-system component (Card, Button, IconButton, Input,
   Select, Table, Badge, InlineAlert, EmptyState, Dialog, Spinner) from the design's inline React
   styles into a plain CSS class, referencing only those tokens. Re-vendoring updated tokens
   restyles the whole app.
 - `src/frontend/icons.ts` inlines the eight Lucide glyphs the design uses as SVG, rather than
   loading them from a CDN at runtime as the design canvas does, so the app stays self-contained.
-- `tokens/typography.css` keeps the design's Google Fonts `@import` for Plus Jakarta Sans and
-  JetBrains Mono. It is the app's only outbound request; both tokens carry system fallback stacks,
-  so the UI is correct offline. Delete the `@import` line to drop it entirely.
+- `tokens/typography.css` drops the design's Google Fonts `@import` for Plus Jakarta Sans and
+  JetBrains Mono, so the app makes no outbound request and stays entirely self-hosted. The font
+  tokens keep those families at the head of their stacks — a machine that has them installed still
+  uses them — and otherwise fall back to the system sans and mono. Re-vendoring the file from the
+  design system reintroduces the `@import`; the file carries a comment saying so.
 
 Quantities and prices are handled with `decimal.js`, not native numbers. The domain supports values
 up to 1,000,000,000,000 with 8 decimal places, and a holding value multiplies two of those together

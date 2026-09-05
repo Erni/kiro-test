@@ -1,4 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+/*
+ * Vendored from the Vela design system, with ONE deliberate deviation: the
+ * design's `@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans…')`
+ * has been removed, so the app makes no outbound request and renders from the
+ * fallback stacks below. Re-vendoring this file from the design system will
+ * reintroduce that line — delete it again.
+ */
 :root{
 --font-sans:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 --font-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
