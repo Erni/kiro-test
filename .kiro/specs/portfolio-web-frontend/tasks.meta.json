@@ -1,0 +1,172 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Configure the frontend build and static asset skeleton": [
+      {
+        "executionId": "784e4646-1918-44e4-8dde-1f1d1fa3e7a4",
+        "chatSessionId": "sess_b66d80cb-0991-480f-b8b9-84b9277a9509",
+        "timestamp": 1788596978145
+      },
+      {
+        "executionId": "784e4646-1918-44e4-8dde-1f1d1fa3e7a4",
+        "chatSessionId": "sess_b66d80cb-0991-480f-b8b9-84b9277a9509",
+        "timestamp": 1788598460132
+      }
+    ],
+    "1.2 Define shared frontend wire-contract types": [
+      {
+        "executionId": "1a11412b-e8c8-40b1-8d88-00d87d398e3d",
+        "chatSessionId": "sess_283ead7e-5cb1-43e4-b581-04a0520b65dc",
+        "timestamp": 1788598650079
+      },
+      {
+        "executionId": "1a11412b-e8c8-40b1-8d88-00d87d398e3d",
+        "chatSessionId": "sess_283ead7e-5cb1-43e4-b581-04a0520b65dc",
+        "timestamp": 1788598717493
+      }
+    ],
+    "1. Set up frontend project structure and build configuration": [
+      {
+        "executionId": "1a11412b-e8c8-40b1-8d88-00d87d398e3d",
+        "chatSessionId": "sess_283ead7e-5cb1-43e4-b581-04a0520b65dc",
+        "timestamp": 1788598717560
+      }
+    ],
+    "2.1 Implement the loading indicator": [
+      {
+        "executionId": "55cbc9b2-fd5d-4768-9b93-72bd50bac98f",
+        "chatSessionId": "sess_8e119ec7-5614-4382-a963-934d11f6dd26",
+        "timestamp": 1788598770211
+      },
+      {
+        "executionId": "55cbc9b2-fd5d-4768-9b93-72bd50bac98f",
+        "chatSessionId": "sess_8e119ec7-5614-4382-a963-934d11f6dd26",
+        "timestamp": 1788598825141
+      }
+    ],
+    "2.3 Implement error presentation": [
+      {
+        "executionId": "a2302858-5256-43a9-9f55-4890f65f5483",
+        "chatSessionId": "sess_357fb1b2-5a22-4ad4-8994-015d5bb16136",
+        "timestamp": 1788599094593
+      },
+      {
+        "executionId": "a2302858-5256-43a9-9f55-4890f65f5483",
+        "chatSessionId": "sess_357fb1b2-5a22-4ad4-8994-015d5bb16136",
+        "timestamp": 1788599143354
+      }
+    ],
+    "2.5 Implement the portfolio-changed event bus": [
+      {
+        "executionId": "d31e5beb-92b4-4def-a353-c4f2f281830b",
+        "chatSessionId": "sess_c22d2fc3-7f39-4028-a88c-cb3f52b22c6d",
+        "timestamp": 1788599213221
+      },
+      {
+        "executionId": "d31e5beb-92b4-4def-a353-c4f2f281830b",
+        "chatSessionId": "sess_c22d2fc3-7f39-4028-a88c-cb3f52b22c6d",
+        "timestamp": 1788599264518
+      }
+    ],
+    "2. Implement cross-cutting request infrastructure": [
+      {
+        "executionId": "d31e5beb-92b4-4def-a353-c4f2f281830b",
+        "chatSessionId": "sess_c22d2fc3-7f39-4028-a88c-cb3f52b22c6d",
+        "timestamp": 1788599264599
+      }
+    ],
+    "3.1 Implement `ApiClient`": [
+      {
+        "executionId": "d8672336-9284-4170-a0a2-fe5a56699ba7",
+        "chatSessionId": "sess_5ae64e90-0777-4202-9493-b4be08c431c9",
+        "timestamp": 1788599422533
+      },
+      {
+        "executionId": "d8672336-9284-4170-a0a2-fe5a56699ba7",
+        "chatSessionId": "sess_5ae64e90-0777-4202-9493-b4be08c431c9",
+        "timestamp": 1788599525420
+      }
+    ],
+    "3. Implement the Backend_API client": [
+      {
+        "executionId": "d8672336-9284-4170-a0a2-fe5a56699ba7",
+        "chatSessionId": "sess_5ae64e90-0777-4202-9493-b4be08c431c9",
+        "timestamp": 1788599525524
+      }
+    ],
+    "5.5 Implement the holding removal control": [
+      {
+        "executionId": "14f18626-6b3a-40f5-9f5c-e24a26e5042f",
+        "chatSessionId": "sess_d0b42688-15a4-44a8-b680-ea09704f3490",
+        "timestamp": 1788619270346
+      },
+      {
+        "executionId": "14f18626-6b3a-40f5-9f5c-e24a26e5042f",
+        "chatSessionId": "sess_d0b42688-15a4-44a8-b680-ea09704f3490",
+        "timestamp": 1788619402379
+      }
+    ],
+    "5.7 Implement the holding price-update control": [
+      {
+        "executionId": "e5ae4654-9ac1-4fa5-a19a-4d9e2c102845",
+        "chatSessionId": "sess_83d5bff8-5bd2-4ccd-b09f-4bb3646bfa49",
+        "timestamp": 1788619479506
+      },
+      {
+        "executionId": "e5ae4654-9ac1-4fa5-a19a-4d9e2c102845",
+        "chatSessionId": "sess_83d5bff8-5bd2-4ccd-b09f-4bb3646bfa49",
+        "timestamp": 1788619619548
+      }
+    ],
+    "5. Implement the Portfolio Overview view": [
+      {
+        "executionId": "e5ae4654-9ac1-4fa5-a19a-4d9e2c102845",
+        "chatSessionId": "sess_83d5bff8-5bd2-4ccd-b09f-4bb3646bfa49",
+        "timestamp": 1788619619610
+      }
+    ],
+    "6. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "79de4740-8e6d-4609-9821-bb51a6787a81",
+        "chatSessionId": "sess_83d5bff8-5bd2-4ccd-b09f-4bb3646bfa49",
+        "timestamp": 1788619887111
+      },
+      {
+        "executionId": "79de4740-8e6d-4609-9821-bb51a6787a81",
+        "chatSessionId": "sess_83d5bff8-5bd2-4ccd-b09f-4bb3646bfa49",
+        "timestamp": 1788619920551
+      }
+    ],
+    "11.1 Compose the application in `main.ts`": [
+      {
+        "executionId": "f0dce704-012f-4d24-8046-aeeee0847d2c",
+        "chatSessionId": "sess_83d5bff8-5bd2-4ccd-b09f-4bb3646bfa49",
+        "timestamp": 1788620163267
+      },
+      {
+        "executionId": "f0dce704-012f-4d24-8046-aeeee0847d2c",
+        "chatSessionId": "sess_83d5bff8-5bd2-4ccd-b09f-4bb3646bfa49",
+        "timestamp": 1788620250913
+      }
+    ],
+    "11. Wire the frontend application and serve it from Express": [
+      {
+        "executionId": "f0dce704-012f-4d24-8046-aeeee0847d2c",
+        "chatSessionId": "sess_83d5bff8-5bd2-4ccd-b09f-4bb3646bfa49",
+        "timestamp": 1788620250968
+      }
+    ],
+    "12. Final checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "8d03f141-df09-44f3-bedd-0d615fd5d68e",
+        "chatSessionId": "sess_83d5bff8-5bd2-4ccd-b09f-4bb3646bfa49",
+        "timestamp": 1788620324346
+      },
+      {
+        "executionId": "8d03f141-df09-44f3-bedd-0d615fd5d68e",
+        "chatSessionId": "sess_83d5bff8-5bd2-4ccd-b09f-4bb3646bfa49",
+        "timestamp": 1788620347983
+      }
+    ]
+  }
+}

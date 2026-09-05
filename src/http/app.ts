@@ -1,3 +1,5 @@
+import path from 'path';
+
 import express from 'express';
 
 import { errorHandler, notFoundHandler } from './errorMapping';
@@ -21,16 +23,20 @@ import type { Express } from 'express';
  * Middleware order is the whole content of this function, and it is not
  * arbitrary:
  *
- * 1. `express.json()` first — handlers receive an already-parsed `req.body`. A
+ * 1. `express.static` first, serving the compiled frontend from `public/`.
+ *    `GET /` resolves to `public/index.html`, and a request for a static
+ *    asset that doesn't exist falls through (`express.static` calls `next()`
+ *    on a miss) to the API routers below rather than terminating there.
+ * 2. `express.json()` next — handlers receive an already-parsed `req.body`. A
  *    body that is not JSON is rejected here, before any handler runs, and
- *    surfaces through the error boundary in step 4.
- * 2. The route modules, each mounted at the root with full paths declared
+ *    surfaces through the error boundary in step 5.
+ * 3. The route modules, each mounted at the root with full paths declared
  *    inside. Prefix mounting would not work: `/holdings` is split across two
  *    modules, since `PATCH /holdings/:symbol/price` belongs with the portfolio
  *    read model rather than with holding CRUD.
- * 3. `notFoundHandler` after every route, so it only sees requests nothing
+ * 4. `notFoundHandler` after every route, so it only sees requests nothing
  *    matched.
- * 4. `errorHandler` last, because Express only routes errors to middleware
+ * 5. `errorHandler` last, because Express only routes errors to middleware
  *    registered after the point they were raised.
  *
  * No listener is started here — that belongs to the entrypoint, which keeps the
@@ -47,6 +53,8 @@ export function createApp(service: PortfolioService): Express {
   // Advertising the framework and version only helps someone matching the
   // deployment against known vulnerabilities.
   app.disable('x-powered-by');
+
+  app.use(express.static(path.join(__dirname, '../../public')));
 
   app.use(express.json());
 

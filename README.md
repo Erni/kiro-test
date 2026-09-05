@@ -1,10 +1,12 @@
 ﻿# kiro-test
 
-A small HTTP service for managing a portfolio of cryptoassets: track holdings, record buy/sell
-transactions, update prices, and read back the current portfolio value.
+A small full-stack app for managing a portfolio of cryptoassets: track holdings, record buy/sell
+transactions, update prices, and read back the current portfolio value, from a browser UI backed
+by an HTTP API.
 
 It doubles as a reference for spec-driven development with Kiro — the requirements, design, and
-implementation plan that produced this code live in `.kiro/specs/crypto-portfolio-core/`.
+implementation plan for the backend live in `.kiro/specs/crypto-portfolio-core/`, and for the
+browser frontend in `.kiro/specs/portfolio-web-frontend/`.
 
 ## Requirements
 
@@ -15,17 +17,19 @@ implementation plan that produced this code live in `.kiro/specs/crypto-portfoli
 ```powershell
 npm install
 npm run build
+npm run build:frontend
 npm start
 ```
 
-The server listens on `http://localhost:3000` by default.
+Open `http://localhost:3000` in a browser for the UI, or call the API directly (see below).
 
-| Script            | What it does                                  |
-| ----------------- | --------------------------------------------- |
-| `npm run build`   | Compiles TypeScript to `dist/`                |
-| `npm start`       | Runs the compiled server from `dist/`         |
-| `npm test`        | Runs the full Jest suite once (no watch mode) |
-| `npm run typecheck` | Type-checks without emitting output         |
+| Script                | What it does                                    |
+| --------------------- | ------------------------------------------------ |
+| `npm run build`       | Compiles the backend TypeScript to `dist/`        |
+| `npm run build:frontend` | Compiles the frontend TypeScript to `public/app/` |
+| `npm start`           | Runs the compiled server from `dist/`             |
+| `npm test`            | Runs the full Jest suite once (no watch mode)     |
+| `npm run typecheck`   | Type-checks without emitting output               |
 
 ### Configuration
 
@@ -36,13 +40,14 @@ The server listens on `http://localhost:3000` by default.
 
 ## Architecture
 
-Four layers, with dependencies pointing in one direction only:
+Four backend layers, with dependencies pointing in one direction only, plus a static browser
+frontend served by the same Express app:
 
 ```
-HTTP (Express routes)  ->  PortfolioService  ->  Domain (pure)
-                                  |
-                                  v
-                       PortfolioRepository <- JsonFilePortfolioRepository
+Frontend (public/app, static)  ->  HTTP (Express routes)  ->  PortfolioService  ->  Domain (pure)
+                                                                     |
+                                                                     v
+                                                          PortfolioRepository <- JsonFilePortfolioRepository
 ```
 
 - **`src/domain`** — pure, framework-free business rules: validation, state transitions, valuation.
@@ -53,12 +58,18 @@ HTTP (Express routes)  ->  PortfolioService  ->  Domain (pure)
 - **`src/persistence`** — `JsonFilePortfolioRepository` writes to a temp file and renames over the
   target, so an interrupted write cannot corrupt existing data.
 - **`src/http`** — thin routes that shape requests, await the service, and render the result. All
-  status-code mapping lives in `errorMapping.ts`.
+  status-code mapping lives in `errorMapping.ts`. `app.ts` also serves the compiled frontend as
+  static assets, mounted ahead of the API routers so a missed static request falls through to them.
+- **`src/frontend`** — a framework-free, no-bundler browser UI compiled by `tsconfig.frontend.json`
+  to `public/app/`. `apiClient.ts` is the sole caller of `fetch`; `main.ts` composes four views
+  (portfolio overview, add-holding form, transaction form, transaction history) against the
+  containers declared in `public/index.html`. Views communicate through a small `portfolioChanged`
+  event bus (`portfolioEvents.ts`) rather than referencing each other directly.
 
 Quantities and prices are handled with `decimal.js`, not native numbers. The domain supports values
 up to 1,000,000,000,000 with 8 decimal places, and a holding value multiplies two of those together
 — a range IEEE-754 doubles cannot represent exactly. They cross the wire as **strings** for the same
-reason.
+reason, and the frontend keeps them as opaque strings too, never parsing them to `number`.
 
 ## API
 
@@ -133,7 +144,7 @@ A sell that reduces a holding to zero removes the holding but keeps its transact
 npm test
 ```
 
-Two complementary styles:
+Two complementary styles on the backend, plus DOM-based unit tests for the frontend:
 
 - **Property-based tests** (`fast-check`, in `test/properties/`) cover the 17 correctness properties
   defined in the design — things like "a persistence failure leaves both in-memory and persisted
@@ -142,6 +153,10 @@ Two complementary styles:
 - **Unit and integration tests** cover fixed scenarios that are not universal properties: timestamp
   assignment, first-run startup with no data file, startup against a corrupted file, atomic write
   behaviour, and HTTP status mapping.
+- **Frontend tests** (`test/frontend/`) use Jest with `jest-environment-jsdom` and
+  `@testing-library/dom` against a mocked `apiClient`. The frontend introduces no business logic of
+  its own, so these are example-based only — no property-based tests — covering rendering, form
+  validation, and the success/error paths of each view.
 
 ## Security
 
