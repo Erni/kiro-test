@@ -14,23 +14,30 @@
  * Per the Vela design this form is the first of the side panel's two tabs;
  * the tab chrome itself lives in `public/index.html` and is wired by
  * `sidePanelTabs.ts`, so this view still owns nothing but its own form.
- * Symbols are upper-cased as they are typed, matching the design and the
- * Backend_API's uppercase-only symbol format.
  *
- * **Validates: Requirements 5.1, 5.2, 5.3, 5.4, 5.5, 5.6**
+ * The Cryptoasset symbol is selected from the fixed Cryptoasset_Selection_List
+ * (Req 9.2, 9.3, 9.4) rather than typed: the control is a `<select>`
+ * populated, in list order, from `cryptoassetSelectionList.ts`'s
+ * `CRYPTOASSET_SELECTION_LIST`, with each option's visible text showing the
+ * symbol and display name (e.g. `BTC — Bitcoin`) and its value set to the
+ * symbol alone, so the submitted symbol value is always exactly one entry's
+ * symbol (Req 9.5).
+ *
+ * **Validates: Requirements 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 9.2, 9.3, 9.4, 9.5**
  */
 
 import * as apiClient from '../apiClient.js';
 import { createIcon } from '../icons.js';
 import { messageForApiError, messageForNetworkFailure } from '../errorPresentation.js';
 import * as portfolioEvents from '../portfolioEvents.js';
+import { CRYPTOASSET_SELECTION_LIST } from '../cryptoassetSelectionList.js';
 import type { TransactionRequest, TransactionResponse } from '../types.js';
 
 const FORM_HTML = `
   <form id="transaction-form" class="form-stack">
     <label class="field field-required" for="transaction-symbol">
       <span class="field-label">Symbol</span>
-      <input id="transaction-symbol" name="symbol" type="text" required autocomplete="off" />
+      <select id="transaction-symbol" name="symbol" required></select>
     </label>
     <label class="field" for="transaction-type">
       <span class="field-label">Type</span>
@@ -53,9 +60,23 @@ const FORM_HTML = `
   <p id="transaction-error" class="error-message" hidden></p>
 `;
 
+/**
+ * Populates `select` with one `<option>` per {@link CRYPTOASSET_SELECTION_LIST}
+ * entry, in list order (Req 9.3): visible text shows `symbol — displayName`
+ * (Req 9.4), and the option's value is the symbol alone (Req 9.5).
+ */
+function populateSymbolOptions(select: HTMLSelectElement): void {
+  for (const entry of CRYPTOASSET_SELECTION_LIST) {
+    const option = document.createElement('option');
+    option.value = entry.symbol;
+    option.textContent = `${entry.symbol} — ${entry.displayName}`;
+    select.appendChild(option);
+  }
+}
+
 /** Reads the current field values from `form` into a `TransactionRequest`. */
 function readInput(form: HTMLFormElement): TransactionRequest {
-  const symbolField = form.elements.namedItem('symbol') as HTMLInputElement;
+  const symbolField = form.elements.namedItem('symbol') as HTMLSelectElement;
   const typeField = form.elements.namedItem('type') as HTMLSelectElement;
   const quantityField = form.elements.namedItem('quantity') as HTMLInputElement;
   const pricePerUnitField = form.elements.namedItem('pricePerUnit') as HTMLInputElement;
@@ -97,15 +118,13 @@ export function init(container: HTMLElement): void {
   const confirmationElement = container.querySelector('#transaction-confirmation') as HTMLElement;
   const errorElement = container.querySelector('#transaction-error') as HTMLElement;
   const submitButton = container.querySelector('#transaction-submit') as HTMLButtonElement;
-  const symbolInput = container.querySelector('#transaction-symbol') as HTMLInputElement;
+  const symbolSelect = container.querySelector('#transaction-symbol') as HTMLSelectElement;
 
   // The design's accent button leads with a swap glyph; it is prepended here
   // rather than written into FORM_HTML so the icon markup stays in `icons.ts`.
   submitButton.insertBefore(createIcon('arrow-left-right', 14), submitButton.firstChild);
 
-  symbolInput.addEventListener('input', () => {
-    symbolInput.value = symbolInput.value.toUpperCase();
-  });
+  populateSymbolOptions(symbolSelect);
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This plan implements a static, framework-free browser frontend for the existing `crypto-portfolio-core` Backend_API: a single `ApiClient` module that is the only caller of `fetch`, small cross-cutting helpers (loading indicator, error presentation, a portfolio-changed event bus), four views (overview, add-holding form, transaction form, transaction history), a `main.ts` composition root, and one middleware line added to the existing Express app to serve the compiled output as static assets. Implementation language is TypeScript, compiled by a dedicated `tsconfig.frontend.json` targeting the browser, with no bundler and no UI framework, per the design.
+This plan implements a static, framework-free browser frontend for the existing `crypto-portfolio-core` Backend_API: a single `ApiClient` module that is the only caller of `fetch`, small cross-cutting helpers (loading indicator, error presentation, a portfolio-changed event bus, the fixed Cryptoasset_Selection_List), four views (overview, add-holding form, transaction form, transaction history), a `main.ts` composition root, and one middleware line added to the existing Express app to serve the compiled output as static assets. Implementation language is TypeScript, compiled by a dedicated `tsconfig.frontend.json` targeting the browser, with no bundler and no UI framework, per the design.
 
 The design has no Correctness Properties section (see design's "Correctness Properties" and "Testing Strategy": this feature introduces no business logic of its own, only rendering and relaying what `crypto-portfolio-core` already validates and computes). Accordingly, this plan contains **no property-based test tasks** — only unit and integration test tasks, using Jest with `jest-environment-jsdom` (opted in per-file via the `@jest-environment jsdom` docblock, per the design) and `@testing-library/dom`.
 
@@ -47,6 +47,14 @@ Tasks are grouped by implementation module so that each source file has a single
   - [ ]* 2.6 Write unit tests for the portfolio-changed event bus
     - In `test/frontend/portfolioEvents.test.ts`: a subscriber is invoked when `portfolioChanged` is published; a subscriber added after unsubscribing is not invoked
     - _Requirements: 2.3, 3.4, 4.5, 5.4, 5.5, 7.3, 7.4_
+
+  - [x] 2.7 Implement the Cryptoasset selection list
+    - In `src/frontend/cryptoassetSelectionList.ts`: export the `CryptoassetListEntry` type and the fixed, ordered 15-entry `CRYPTOASSET_SELECTION_LIST` constant per Req 9.1
+    - _Requirements: 9.1_
+
+  - [ ]* 2.8 Write unit tests for the Cryptoasset selection list
+    - In `test/frontend/cryptoassetSelectionList.test.ts`: assert the exported list has exactly the 15 entries from Req 9.1, in the specified order, each with its documented symbol and display name
+    - _Requirements: 9.1_
 
 - [x] 3. Implement the Backend_API client
   - [x] 3.1 Implement `ApiClient`
@@ -98,23 +106,23 @@ Tasks are grouped by implementation module so that each source file has a single
 - [x] 6. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 7. Implement the Add Holding form
+- [x] 7. Implement the Add Holding form
   - [x] 7.1 Implement the add-holding form
-    - In `src/frontend/views/addHoldingForm.ts`: a form requiring symbol, quantity, and Current_Price before it can be submitted; on submit, call `apiClient.addHolding(input)`; on success, publish `portfolioChanged` so the Holdings_List reflects the new Holding, and clear the form; on rejection, display the returned error message and retain the entered values
-    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
+    - In `src/frontend/views/addHoldingForm.ts`: a form requiring symbol, quantity, and Current_Price before it can be submitted; render the Cryptoasset selection control as a `<select>` populated from `cryptoassetSelectionList.ts`'s `CRYPTOASSET_SELECTION_LIST`, in list order, with each option's visible text showing symbol and display name (e.g. `BTC — Bitcoin`) and its value set to the symbol alone, so the submitted symbol value is the selected entry's symbol only; on submit, call `apiClient.addHolding(input)`; on success, publish `portfolioChanged` so the Holdings_List reflects the new Holding, and clear the form; on rejection, display the returned error message and retain the entered values
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 9.2, 9.3, 9.4, 9.5_
 
-  - [x]* 7.2 Write unit tests for the add-holding form
-    - In `test/frontend/views/addHoldingForm.test.ts` (jsdom, mocked `apiClient`): a form left incomplete cannot be submitted; submitting with all fields sends the expected request and clears the form on success; a rejected submission shows the backend message and retains the entered values
-    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
+  - [ ]* 7.2 Write unit tests for the add-holding form
+    - In `test/frontend/views/addHoldingForm.test.ts` (jsdom, mocked `apiClient`): a form left incomplete cannot be submitted; submitting with all fields sends the expected request and clears the form on success; a rejected submission shows the backend message and retains the entered values; the Cryptoasset `<select>` renders one option per `CRYPTOASSET_SELECTION_LIST` entry in list order with symbol+display-name text; submitting with an entry selected sends that entry's symbol alone
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 9.3, 9.4, 9.5_
 
-- [ ] 8. Implement the Transaction form
+- [x] 8. Implement the Transaction form
   - [x] 8.1 Implement the transaction form
-    - In `src/frontend/views/transactionForm.ts`: a form for symbol, Transaction_Type, quantity, and price per unit; on submit, call `apiClient.recordTransaction(input)`; on success, display a confirmation with the recorded Transaction's fields and publish `portfolioChanged`; on rejection, display the returned error message
-    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6_
+    - In `src/frontend/views/transactionForm.ts`: a form for symbol, Transaction_Type, quantity, and price per unit; render the Cryptoasset selection control as a `<select>` populated from `cryptoassetSelectionList.ts`'s `CRYPTOASSET_SELECTION_LIST`, in list order, with each option's visible text showing symbol and display name (e.g. `BTC — Bitcoin`) and its value set to the symbol alone, so the submitted symbol value is the selected entry's symbol only; on submit, call `apiClient.recordTransaction(input)`; on success, display a confirmation with the recorded Transaction's fields and publish `portfolioChanged`; on rejection, display the returned error message
+    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 9.2, 9.3, 9.4, 9.5_
 
-  - [x]* 8.2 Write unit tests for the transaction form
-    - In `test/frontend/views/transactionForm.test.ts` (jsdom, mocked `apiClient`): a successful submission shows the confirmation with the submitted fields and publishes `portfolioChanged`; a rejected submission shows the returned error message
-    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.6_
+  - [ ]* 8.2 Write unit tests for the transaction form
+    - In `test/frontend/views/transactionForm.test.ts` (jsdom, mocked `apiClient`): a successful submission shows the confirmation with the submitted fields and publishes `portfolioChanged`; a rejected submission shows the returned error message; the Cryptoasset `<select>` renders one option per `CRYPTOASSET_SELECTION_LIST` entry in list order with symbol+display-name text; submitting with an entry selected sends that entry's symbol alone
+    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.6, 9.3, 9.4, 9.5_
 
 - [ ] 9. Implement the Transaction History view
   - [x] 9.1 Implement the transaction history view
@@ -149,6 +157,7 @@ Tasks are grouped by implementation module so that each source file has a single
 - Tasks marked with `*` are optional test tasks and can be skipped for a faster MVP, though they are strongly recommended given this feature's role as a Kiro best-practices reference implementation.
 - This design has no Correctness Properties section, so this plan contains no property-based test tasks; all testing is example-based unit/integration testing with Jest and `jest-environment-jsdom`, per the design's Testing Strategy.
 - Requirements 3, 4, and 7 each add a control to `overviewView.ts` (tasks 5.3, 5.5, 5.7); these are sequenced as separate sub-tasks, each immediately followed by its own test sub-task, so no two tasks edit that file (or its test file) concurrently.
+- Requirement 9's Cryptoasset_Selection_List is implemented once as a standalone module (tasks 2.7, 2.8) and consumed by the add-holding form (7.1, 7.2) and transaction form (8.1, 8.2), which is why those two tasks now also reference Requirements 9.2-9.5.
 - Visual layout and CSS are not covered by automated tests, per the design's Testing Strategy; manual review is sufficient for a scope this small.
 - The Frontend introduces no new business logic, validation, or error conditions of its own; its correctness rests on calling the right `Backend_API` endpoint with the right body and rendering what came back, which `crypto-portfolio-core`'s own (already-implemented and property-tested) domain layer guarantees.
 
@@ -158,8 +167,8 @@ Tasks are grouped by implementation module so that each source file has a single
 {
   "waves": [
     { "id": 0, "tasks": ["1.1", "1.2"] },
-    { "id": 1, "tasks": ["2.1", "2.3", "2.5", "11.2"] },
-    { "id": 2, "tasks": ["2.2", "2.4", "2.6", "3.1", "11.3"] },
+    { "id": 1, "tasks": ["2.1", "2.3", "2.5", "2.7", "11.2"] },
+    { "id": 2, "tasks": ["2.2", "2.4", "2.6", "2.8", "3.1", "11.3"] },
     { "id": 3, "tasks": ["3.2", "5.1", "7.1", "8.1", "9.1"] },
     { "id": 4, "tasks": ["5.2", "5.3", "7.2", "8.2", "9.2"] },
     { "id": 5, "tasks": ["5.4", "5.5"] },

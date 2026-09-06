@@ -167,6 +167,56 @@
         "chatSessionId": "sess_83d5bff8-5bd2-4ccd-b09f-4bb3646bfa49",
         "timestamp": 1788620347983
       }
+    ],
+    "2.7 Implement the Cryptoasset selection list": [
+      {
+        "executionId": "a6a5acdb-cc5e-4879-853c-d45882ae4c25",
+        "chatSessionId": "sess_8972f579-ee80-4690-9331-70b4f2455e5a",
+        "timestamp": 1788712866199
+      },
+      {
+        "executionId": "a6a5acdb-cc5e-4879-853c-d45882ae4c25",
+        "chatSessionId": "sess_8972f579-ee80-4690-9331-70b4f2455e5a",
+        "timestamp": 1788712923223
+      }
+    ],
+    "7.1 Implement the add-holding form": [
+      {
+        "executionId": "559f5833-8c01-4edf-b41e-c38aab01a4f9",
+        "chatSessionId": "sess_425c97d1-e382-4968-8df5-9c2b390955a2",
+        "timestamp": 1788713059888
+      },
+      {
+        "executionId": "559f5833-8c01-4edf-b41e-c38aab01a4f9",
+        "chatSessionId": "sess_425c97d1-e382-4968-8df5-9c2b390955a2",
+        "timestamp": 1788713295384
+      }
+    ],
+    "7. Implement the Add Holding form": [
+      {
+        "executionId": "559f5833-8c01-4edf-b41e-c38aab01a4f9",
+        "chatSessionId": "sess_425c97d1-e382-4968-8df5-9c2b390955a2",
+        "timestamp": 1788713295474
+      }
+    ],
+    "8.1 Implement the transaction form": [
+      {
+        "executionId": "440dac5e-e391-4eea-aef8-d20bc4ded4c3",
+        "chatSessionId": "sess_66b4f40f-ac0c-4a8f-ae4b-1e6276dabd3d",
+        "timestamp": 1788718404770
+      },
+      {
+        "executionId": "440dac5e-e391-4eea-aef8-d20bc4ded4c3",
+        "chatSessionId": "sess_66b4f40f-ac0c-4a8f-ae4b-1e6276dabd3d",
+        "timestamp": 1788718637135
+      }
+    ],
+    "8. Implement the Transaction form": [
+      {
+        "executionId": "440dac5e-e391-4eea-aef8-d20bc4ded4c3",
+        "chatSessionId": "sess_66b4f40f-ac0c-4a8f-ae4b-1e6276dabd3d",
+        "timestamp": 1788718637256
+      }
     ]
   }
 }
