@@ -82,9 +82,10 @@ All frontend source lives under `src/frontend/`, compiled by a dedicated `tsconf
 | `loadingIndicator.ts` | Shows/hides the single global loading indicator (Req 8.1, 8.2), using a pending-request counter so overlapping requests don't hide it prematurely. |
 | `errorPresentation.ts` | Turns an `ApiError`/`NetworkError` into the exact string shown to the user; the one place that knows how backend error bodies map to text. |
 | `portfolioEvents.ts` | A minimal pub/sub with one event (`portfolioChanged`) used to tell the overview view to refresh after any other view's mutation succeeds. |
+| `cryptoassetSelectionList.ts` | Exports the fixed, ordered Cryptoasset_Selection_List of 15 entries (Req 9.1); no behavior beyond the constant itself. |
 | `views/overviewView.ts` | Renders the Holdings_List and Portfolio_Value (Req 1); renders, per Holding, the edit control (Req 3), remove control (Req 4), and price-update control (Req 7); subscribes to `portfolioChanged`. |
-| `views/addHoldingForm.ts` | The new-Holding form (Req 2). |
-| `views/transactionForm.ts` | The buy/sell Transaction form (Req 5). |
+| `views/addHoldingForm.ts` | The new-Holding form (Req 2), rendering its Cryptoasset selection control from `cryptoassetSelectionList.ts` (Req 9). |
+| `views/transactionForm.ts` | The buy/sell Transaction form (Req 5), rendering its Cryptoasset selection control from `cryptoassetSelectionList.ts` (Req 9). |
 | `views/transactionHistoryView.ts` | The symbol lookup and Transaction history display (Req 6). |
 | `main.ts` | Wires the above together against the DOM once the page loads. No logic of its own beyond composition. |
 
@@ -157,6 +158,38 @@ export function messageForNetworkFailure(): string;          // fixed copy for R
 
 `messageForApiError` returns the Backend_API's own `message` unchanged, per the requirements' repeated "display the error message returned by the Backend_API" — the Frontend does not rewrite or generalize backend validation text. `messageForNetworkFailure` is the one message the Frontend itself owns, since by definition no backend response was received to relay.
 
+### Cryptoasset selection list
+
+```typescript
+// cryptoassetSelectionList.ts
+
+export interface CryptoassetListEntry {
+  readonly symbol: string;       // e.g. "BTC"
+  readonly displayName: string;  // e.g. "Bitcoin"
+}
+
+/** The fixed, ordered list required by Req 9.1, largest to smallest market cap. */
+export const CRYPTOASSET_SELECTION_LIST: readonly CryptoassetListEntry[] = [
+  { symbol: 'BTC', displayName: 'Bitcoin' },
+  { symbol: 'ETH', displayName: 'Ethereum' },
+  { symbol: 'USDT', displayName: 'Tether' },
+  { symbol: 'BNB', displayName: 'BNB' },
+  { symbol: 'XRP', displayName: 'XRP' },
+  { symbol: 'USDC', displayName: 'USDC' },
+  { symbol: 'SOL', displayName: 'Solana' },
+  { symbol: 'TRX', displayName: 'TRON' },
+  { symbol: 'HYPE', displayName: 'Hyperliquid' },
+  { symbol: 'ZEC', displayName: 'Zcash' },
+  { symbol: 'DOGE', displayName: 'Dogecoin' },
+  { symbol: 'XMR', displayName: 'Monero' },
+  { symbol: 'LINK', displayName: 'Chainlink' },
+  { symbol: 'LEO', displayName: 'UNUS SED LEO' },
+  { symbol: 'ADA', displayName: 'Cardano' },
+];
+```
+
+This module is a static data file, not a component with behavior of its own — it exports one constant and one type, copied directly from Req 9.1's ordered list. `addHoldingForm.ts` and `transactionForm.ts` are its only consumers (Req 9.2): each renders a `<select>` populated by iterating `CRYPTOASSET_SELECTION_LIST` in array order (Req 9.3), with each `<option>`'s visible text showing both `symbol` and `displayName` (Req 9.4, e.g. `BTC — Bitcoin`) and its `value` set to `symbol` alone, so submitting either form sends only the selected `symbol` (Req 9.5) — the display name never reaches `ApiClient` or the Backend_API.
+
 ### Client-side data flow
 
 There is exactly one piece of shared client state: the most recently fetched `PortfolioOverviewResponse`, held by `overviewView.ts` and used only to render the Holdings_List and Portfolio_Value. No other view keeps a copy of it or mutates it directly. Every other view's "successful mutation" handler does two things and nothing else:
@@ -196,6 +229,7 @@ The Frontend defines no persisted data model of its own — it holds no state be
 | `HoldingUpdateRequest` | `{ quantity: string; currentPrice: string }` | |
 | `PriceUpdateRequest` | `{ currentPrice: string }` | |
 | `TransactionRequest` | `{ symbol: string; type: 'Buy' \| 'Sell'; quantity: string; pricePerUnit: string }` | |
+| `CryptoassetListEntry` | `{ symbol: string; displayName: string }` | One entry of the static Cryptoasset_Selection_List (Req 9); never sent to the Backend_API as a whole — only `symbol` is submitted. |
 | `ApiError` / `NetworkError` | as defined under [ApiClient](#apiclient) | Internal to the Frontend; never sent anywhere. |
 
 No Correctness Properties section follows this one — see [Testing Strategy](#testing-strategy) for why property-based testing does not apply to this feature.
@@ -206,7 +240,9 @@ No Correctness Properties section follows this one — see [Testing Strategy](#t
 
 This feature introduces no business logic, validation rules, or computations of its own — it only renders and relays what the Backend_API already validates and computes, which is covered by `crypto-portfolio-core`'s 17 correctness properties. There is no pure function or universal input/output relationship owned by this feature to state as a "for all inputs X, property P(X) holds" statement; its correctness is a matter of calling the right endpoint with the right body and rendering what came back, which is verified by the example-based tests described in [Testing Strategy](#testing-strategy). The requirements below are validated indirectly, through the Backend_API's own correctness properties in crypto-portfolio-core; this feature adds no independently-testable property of its own.
 
-**Validates: Requirements 1.1, 2.1, 3.1, 4.1, 5.1, 6.1, 7.1, 8.1**
+The same reasoning covers Requirement 9: the Cryptoasset_Selection_List is a fixed, hardcoded constant, not a computed or validated value with an input space to generate over. There is no "for all inputs" to state about a list with exactly one valid contents and order, defined once in `cryptoassetSelectionList.ts` — verifying it is a matter of asserting that one constant and its two consuming views render it correctly, which the example-based tests in [Testing Strategy](#testing-strategy) already cover.
+
+**Validates: Requirements 1.1, 2.1, 3.1, 4.1, 5.1, 6.1, 7.1, 8.1, 9.1**
 
 ## Error Handling
 
@@ -236,6 +272,8 @@ Planned test coverage, organized by module:
 - **`apiClient.ts`** (`test/frontend/apiClient.test.ts`): for each function, one test for the 2xx success path, one for a representative 4xx/5xx error body (asserting the returned `ApiError` fields match the response), one for a rejected `fetch` (network failure → `NetworkError`), and one for the 30 s timeout firing (using Jest's fake timers to avoid an actual 30-second test). Also verifies `loadingIndicator.requestStarted`/`requestFinished` are called in matched pairs on every path, including the error paths.
 - **`errorPresentation.ts`**: unit tests confirming `messageForApiError` returns the backend message verbatim (no rewriting) and `messageForNetworkFailure` returns the fixed connectivity message.
 - **`loadingIndicator.ts`**: unit tests for the pending-counter behavior — indicator shows on the first `requestStarted`, stays visible while a second overlaps, and hides only once every outstanding call has finished (including via `finally` after a rejection).
+- **`cryptoassetSelectionList.ts`**: a unit test asserting the exported list has exactly the 15 entries from Req 9.1, in the specified order, each with its documented symbol and display name.
+- **Cryptoasset selection control** (within the `addHoldingForm` and `transactionForm` view tests): each form's `<select>` renders one option per `CRYPTOASSET_SELECTION_LIST` entry, in list order, with each option's visible text containing both the symbol and display name (Req 9.3, 9.4); submitting the form with an entry selected sends that entry's `symbol` alone as the Cryptoasset symbol value (Req 9.5).
 - **Views** (`overviewView`, `addHoldingForm`, `transactionForm`, `transactionHistoryView`): jsdom-based tests per view, driving it via `@testing-library/dom` (`fireEvent`/`getByRole`, added as a devDependency) against a mocked `apiClient`, covering the concrete scenarios each requirement describes rather than generated input — for example:
   - Add-Holding form: submit with all fields present sends the expected request and clears the form on success (Req 2.1-2.3, 2.5); submit left incomplete cannot be submitted (Req 2.1); a rejected submission shows the backend message and retains the entered values (Req 2.4, 2.6).
   - Overview view: renders every Holding's symbol/quantity/price/Holding_Value and the Portfolio_Value from a sample response (Req 1.2, 1.3); renders the empty-state message and a zero Portfolio_Value for an empty response (Req 1.4); renders the load-failure message on an `ApiError` (Req 1.5); re-renders after a `portfolioChanged` event.

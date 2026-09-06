@@ -19,6 +19,7 @@ This feature adds a simple web-based frontend to the kiro-test application, givi
 - **Reference_Currency**: The fiat currency (e.g., USD) in which prices and values are expressed.
 - **Holdings_List**: The Frontend view that displays every Holding currently in the Portfolio.
 - **Portfolio_Overview_View**: The Frontend view that displays the Holdings_List together with each Holding's Holding_Value and the Portfolio_Value.
+- **Cryptoasset_Selection_List**: A fixed, ordered list of the 15 Cryptoassets with the largest market capitalization, ranked from largest to smallest according to CoinMarketCap, from which a user chooses a Cryptoasset symbol when adding a Holding or recording a Transaction.
 
 ## Requirements
 
@@ -40,7 +41,7 @@ This feature adds a simple web-based frontend to the kiro-test application, givi
 
 #### Acceptance Criteria
 
-1. THE Frontend SHALL provide a form for submitting a Cryptoasset symbol, quantity, and Current_Price to create a new Holding, requiring a value for each of the three fields before the form can be submitted.
+1. THE Frontend SHALL provide a form for selecting a Cryptoasset symbol from the Cryptoasset_Selection_List and submitting a quantity and Current_Price to create a new Holding, requiring a value for each of the three fields before the form can be submitted.
 2. WHEN a user submits the new Holding form, THE Frontend SHALL send a request to the Backend_API to create the Holding with the submitted values.
 3. WHEN the Backend_API confirms creation of a new Holding, THE Frontend SHALL display the created Holding in the Holdings_List.
 4. IF the Backend_API rejects the new Holding submission, THEN THE Frontend SHALL display the error message returned by the Backend_API to the user.
@@ -78,7 +79,7 @@ This feature adds a simple web-based frontend to the kiro-test application, givi
 
 #### Acceptance Criteria
 
-1. THE Frontend SHALL provide a form for submitting a Cryptoasset symbol, Transaction_Type, quantity, and price per unit to record a Transaction.
+1. THE Frontend SHALL provide a form for selecting a Cryptoasset symbol from the Cryptoasset_Selection_List and submitting a Transaction_Type, quantity, and price per unit to record a Transaction.
 2. WHEN a user submits the Transaction form, THE Frontend SHALL send a request to the Backend_API to record the Transaction with the submitted values.
 3. WHEN the Backend_API confirms a recorded Transaction, THE Frontend SHALL display a confirmation showing the recorded Transaction's Cryptoasset symbol, Transaction_Type, quantity, and price per unit.
 4. WHEN the Backend_API confirms a recorded Transaction, THE Frontend SHALL refresh the Holdings_List to reflect the resulting Holding quantity for that Cryptoasset.
@@ -117,3 +118,15 @@ This feature adds a simple web-based frontend to the kiro-test application, givi
 1. WHILE a request to the Backend_API is in progress, THE Frontend SHALL display a loading indicator that is visible to the user for the duration of that request.
 2. WHEN a request to the Backend_API completes, whether the response indicates success or failure, THE Frontend SHALL remove the loading indicator.
 3. IF a request to the Backend_API fails because no response is received within a 30 second timeout or because the network connection is unavailable, THEN THE Frontend SHALL display a message indicating that the Backend_API could not be reached, in addition to, and without replacing, any view-specific error message required by other requirements in this document.
+
+### Requirement 9: Select a Cryptoasset from a Predefined List
+
+**User Story:** As a portfolio owner, I want to choose a cryptoasset from a list of well-known cryptocurrencies when adding a holding or recording a transaction, so that I don't have to remember or type exact symbols.
+
+#### Acceptance Criteria
+
+1. THE Frontend SHALL maintain a Cryptoasset_Selection_List consisting of exactly the following 15 Cryptoassets, in this order (largest to smallest market capitalization per CoinMarketCap at the time this requirement was written): Bitcoin (BTC), Ethereum (ETH), Tether (USDT), BNB (BNB), XRP (XRP), USDC (USDC), Solana (SOL), TRON (TRX), Hyperliquid (HYPE), Zcash (ZEC), Dogecoin (DOGE), Monero (XMR), Chainlink (LINK), UNUS SED LEO (LEO), Cardano (ADA).
+2. THE Frontend SHALL use the Cryptoasset_Selection_List as the sole means of selecting a Cryptoasset symbol in the new Holding form and in the Transaction form.
+3. WHEN a user opens the Cryptoasset selection control in the new Holding form or the Transaction form, THE Frontend SHALL present the entries of the Cryptoasset_Selection_List in their defined order.
+4. THE Frontend SHALL display, for each entry in the Cryptoasset_Selection_List, both the Cryptoasset's symbol and its display name.
+5. THE Frontend SHALL submit the selected entry's symbol as the Cryptoasset symbol value when the new Holding form or the Transaction form is submitted.

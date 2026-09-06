@@ -3,6 +3,7 @@
 import * as apiClient from '../../../src/frontend/apiClient';
 import * as portfolioEvents from '../../../src/frontend/portfolioEvents';
 import { init } from '../../../src/frontend/views/addHoldingForm';
+import { CRYPTOASSET_SELECTION_LIST } from '../../../src/frontend/cryptoassetSelectionList';
 
 import type { ApiResult } from '../../../src/frontend/apiClient';
 import type { HoldingResponse } from '../../../src/frontend/types';
@@ -33,40 +34,51 @@ describe('addHoldingForm', () => {
 
   function elements(): {
     form: HTMLFormElement;
-    symbolInput: HTMLInputElement;
+    symbolSelect: HTMLSelectElement;
     quantityInput: HTMLInputElement;
     currentPriceInput: HTMLInputElement;
     errorMessage: HTMLElement;
   } {
     const form = container.querySelector<HTMLFormElement>('form');
-    const symbolInput = container.querySelector<HTMLInputElement>('input[name="symbol"]');
+    const symbolSelect = container.querySelector<HTMLSelectElement>('select[name="symbol"]');
     const quantityInput = container.querySelector<HTMLInputElement>('input[name="quantity"]');
     const currentPriceInput = container.querySelector<HTMLInputElement>('input[name="currentPrice"]');
     const errorMessage = container.querySelector<HTMLElement>('.error-message');
 
-    if (!form || !symbolInput || !quantityInput || !currentPriceInput || !errorMessage) {
+    if (!form || !symbolSelect || !quantityInput || !currentPriceInput || !errorMessage) {
       throw new Error('add-holding form did not render as expected');
     }
 
-    return { form, symbolInput, quantityInput, currentPriceInput, errorMessage };
+    return { form, symbolSelect, quantityInput, currentPriceInput, errorMessage };
   }
 
   /** Fills in the form's fields without submitting it. */
   function fillForm(fields: { symbol: string; quantity: string; currentPrice: string }): void {
-    const { symbolInput, quantityInput, currentPriceInput } = elements();
+    const { symbolSelect, quantityInput, currentPriceInput } = elements();
 
-    symbolInput.value = fields.symbol;
+    symbolSelect.value = fields.symbol;
     quantityInput.value = fields.quantity;
     currentPriceInput.value = fields.currentPrice;
   }
 
   it('requires a value for symbol, quantity, and currentPrice before it can be submitted', () => {
     // Req 2.1
-    const { symbolInput, quantityInput, currentPriceInput } = elements();
+    const { symbolSelect, quantityInput, currentPriceInput } = elements();
 
-    expect(symbolInput.required).toBe(true);
+    expect(symbolSelect.required).toBe(true);
     expect(quantityInput.required).toBe(true);
     expect(currentPriceInput.required).toBe(true);
+  });
+
+  it('populates the Cryptoasset select with one option per selection-list entry, in order (Req 9.3, 9.4, 9.5)', () => {
+    const { symbolSelect } = elements();
+
+    expect(symbolSelect.options.length).toBe(CRYPTOASSET_SELECTION_LIST.length);
+    CRYPTOASSET_SELECTION_LIST.forEach((entry, index) => {
+      const option = symbolSelect.options.item(index);
+      expect(option?.value).toBe(entry.symbol);
+      expect(option?.textContent).toBe(`${entry.symbol} — ${entry.displayName}`);
+    });
   });
 
   it('does not call apiClient.addHolding when required fields are left empty', () => {
@@ -91,7 +103,7 @@ describe('addHoldingForm', () => {
     const publishSpy = jest.spyOn(portfolioEvents, 'publish').mockImplementation(() => undefined);
 
     fillForm({ symbol: 'BTC', quantity: '1.5', currentPrice: '50000' });
-    const { form, symbolInput, quantityInput, currentPriceInput, errorMessage } = elements();
+    const { form, symbolSelect, quantityInput, currentPriceInput, errorMessage } = elements();
     form.requestSubmit();
     await flushPromises();
 
@@ -101,7 +113,7 @@ describe('addHoldingForm', () => {
       currentPrice: '50000',
     });
     expect(publishSpy).toHaveBeenCalledTimes(1);
-    expect(symbolInput.value).toBe('');
+    expect(symbolSelect.value).toBe(CRYPTOASSET_SELECTION_LIST[0]?.symbol);
     expect(quantityInput.value).toBe('');
     expect(currentPriceInput.value).toBe('');
     expect(errorMessage.hidden).toBe(true);
@@ -116,13 +128,13 @@ describe('addHoldingForm', () => {
     const publishSpy = jest.spyOn(portfolioEvents, 'publish').mockImplementation(() => undefined);
 
     fillForm({ symbol: 'BTC', quantity: '1.5', currentPrice: '50000' });
-    const { form, symbolInput, quantityInput, currentPriceInput, errorMessage } = elements();
+    const { form, symbolSelect, quantityInput, currentPriceInput, errorMessage } = elements();
     form.requestSubmit();
     await flushPromises();
 
     expect(errorMessage.hidden).toBe(false);
     expect(errorMessage.textContent).toBe('Cryptoasset BTC is already held');
-    expect(symbolInput.value).toBe('BTC');
+    expect(symbolSelect.value).toBe('BTC');
     expect(quantityInput.value).toBe('1.5');
     expect(currentPriceInput.value).toBe('50000');
     expect(publishSpy).not.toHaveBeenCalled();

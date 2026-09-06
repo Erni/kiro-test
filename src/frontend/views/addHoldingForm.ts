@@ -20,18 +20,21 @@
  * absent — leaving the form permanently visible, which is what a container
  * rendered on its own should do.
  *
- * Symbols are upper-cased as they are typed, matching the design. The
- * Backend_API accepts only uppercase letters and digits (see
- * `parseSymbol` in `src/domain/validation.ts`), so this turns what was
- * previously a round-trip validation rejection for lowercase input into
- * input that is simply correct by construction.
+ * The Cryptoasset symbol is selected from the fixed Cryptoasset_Selection_List
+ * (Req 9.2, 9.3, 9.4) rather than typed: the control is a `<select>`
+ * populated, in list order, from `cryptoassetSelectionList.ts`'s
+ * `CRYPTOASSET_SELECTION_LIST`, with each option's visible text showing the
+ * symbol and display name (e.g. `BTC — Bitcoin`) and its value set to the
+ * symbol alone, so the submitted symbol value is always exactly one entry's
+ * symbol (Req 9.5).
  *
- * **Validates: Requirements 2.1, 2.2, 2.3, 2.4, 2.5, 2.6**
+ * **Validates: Requirements 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 9.2, 9.3, 9.4, 9.5**
  */
 
 import * as apiClient from '../apiClient.js';
 import * as errorPresentation from '../errorPresentation.js';
 import * as portfolioEvents from '../portfolioEvents.js';
+import { CRYPTOASSET_SELECTION_LIST } from '../cryptoassetSelectionList.js';
 
 import type { NewHoldingRequest } from '../types.js';
 
@@ -42,7 +45,7 @@ const FORM_HTML = `
   <form class="form-row">
     <label class="field field-required">
       <span class="field-label">Symbol</span>
-      <input type="text" name="symbol" required autocomplete="off" />
+      <select name="symbol" required></select>
     </label>
     <label class="field field-mono field-required">
       <span class="field-label">Quantity</span>
@@ -59,6 +62,20 @@ const FORM_HTML = `
 `;
 
 /**
+ * Populates `select` with one `<option>` per {@link CRYPTOASSET_SELECTION_LIST}
+ * entry, in list order (Req 9.3): visible text shows `symbol — displayName`
+ * (Req 9.4), and the option's value is the symbol alone (Req 9.5).
+ */
+function populateSymbolOptions(select: HTMLSelectElement): void {
+  for (const entry of CRYPTOASSET_SELECTION_LIST) {
+    const option = document.createElement('option');
+    option.value = entry.symbol;
+    option.textContent = `${entry.symbol} — ${entry.displayName}`;
+    select.appendChild(option);
+  }
+}
+
+/**
  * Renders the add-Holding form into `container` and wires up its submit
  * handling. Safe to call more than once; each call replaces `container`'s
  * contents with a fresh form.
@@ -67,15 +84,17 @@ export function init(container: HTMLElement): void {
   container.innerHTML = FORM_HTML;
 
   const form = container.querySelector('form');
-  const symbolInput = container.querySelector<HTMLInputElement>('input[name="symbol"]');
+  const symbolSelect = container.querySelector<HTMLSelectElement>('select[name="symbol"]');
   const quantityInput = container.querySelector<HTMLInputElement>('input[name="quantity"]');
   const currentPriceInput = container.querySelector<HTMLInputElement>('input[name="currentPrice"]');
   const errorMessage = container.querySelector<HTMLParagraphElement>('.error-message');
   const cancelButton = container.querySelector<HTMLButtonElement>('.add-holding-cancel');
 
-  if (!form || !symbolInput || !quantityInput || !currentPriceInput || !errorMessage || !cancelButton) {
+  if (!form || !symbolSelect || !quantityInput || !currentPriceInput || !errorMessage || !cancelButton) {
     return;
   }
+
+  populateSymbolOptions(symbolSelect);
 
   const toggleButton = document.getElementById(TOGGLE_BUTTON_ID);
 
@@ -98,22 +117,18 @@ export function init(container: HTMLElement): void {
       errorMessage.hidden = true;
       errorMessage.textContent = '';
       container.hidden = false;
-      symbolInput.focus();
+      symbolSelect.focus();
     });
     cancelButton.addEventListener('click', closePanel);
   } else {
     cancelButton.hidden = true;
   }
 
-  symbolInput.addEventListener('input', () => {
-    symbolInput.value = symbolInput.value.toUpperCase();
-  });
-
   form.addEventListener('submit', (event) => {
     event.preventDefault();
 
     const input: NewHoldingRequest = {
-      symbol: symbolInput.value,
+      symbol: symbolSelect.value,
       quantity: quantityInput.value,
       currentPrice: currentPriceInput.value,
     };
